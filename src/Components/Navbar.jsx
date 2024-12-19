@@ -16,7 +16,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   return (
     <>
-      <div className="flex items-center justify-between py-5 font-medium sticky top-0 z-10 bg-white">
+      <div className="flex h-24 items-center justify-between py-5 font-medium sticky top-0 z-10 bg-white">
         <Link to="/">
         <h1 className='w-36 text-2xl'>LUXNEST.</h1>
         </Link>
