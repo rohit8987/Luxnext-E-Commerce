@@ -22,7 +22,7 @@ const Navbar = () => {
         </Link>
         
 
-        <ul className="hidden sm:flex gap-5 text-sm text-gray-700  hover:text-gray-900">
+        <ul className="hidden sm:flex gap-5 text-sm md:text-xl text-gray-700  hover:text-gray-900">
           <NavLink to="/" className="flex flex-col items-center gap-1">
             <p className='uppercase'>Home</p>
             <hr className={`w-2/4 border-none h-[1.5px] bg-gray-700 ${location.pathname === "" ? "" : "hidden"
