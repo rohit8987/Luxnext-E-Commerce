@@ -1,5 +1,5 @@
 
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,8 +11,9 @@ import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 
 
 const Navbar = () => {
-  const [visible, setVisible] = useState(false)
-  const {setShowSearch, getCartCount}=useContext(ShopContext)
+  const [visible, setVisible] = useState(false);
+  const {setShowSearch, getCartCount}=useContext(ShopContext);
+  const navigate = useNavigate();
   return (
     <>
       <div className="flex items-center justify-between py-5 font-medium sticky top-0 z-10 bg-white">
@@ -50,7 +51,7 @@ const Navbar = () => {
           </div>
          
           <div className="group relative inline-block">
-            <PersonIcon className="w-8 h-8 cursor-pointer text-gray-700" />
+            <PersonIcon onClick={()=>navigate('/login')} className="w-8 h-8 cursor-pointer text-gray-700" />
             <div className="hidden group-hover:block absolute right-0 w-36 bg-slate-100 text-gray-700 rounded shadow-lg z-10">
               <div className="flex flex-col gap-2 py-3 px-5">
                 <p className="cursor-pointer hover:text-black">My Profile</p>
