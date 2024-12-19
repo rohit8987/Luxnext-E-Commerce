@@ -70,7 +70,7 @@ const Navbar = () => {
             <MenuOutlinedIcon />
           </div>
         </div>
-        <div className={`fixed top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${visible ? 'w-2/3 shadow-lg' : 'w-0'}`}>
+        <div className={`fixed top-0 right-0 bottom-0 overflow-hidden bg-white transition-all duration-300 ease-in-out  ${visible ? 'w-2/3 sm:1/3 shadow-lg' : 'w-0'} overflow-hidden`}>
           <div className="flex flex-col text-gray-600">
             <div onClick={() => setVisible(false)} className="flex items-center gap-4 p-3 cursor-pointer">
               <div className="h-4 rotate-180 flex items-center">
