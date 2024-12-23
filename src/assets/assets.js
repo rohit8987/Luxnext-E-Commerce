@@ -1,7 +1,7 @@
 import imgs from '../assets/kit.avif'
 import img from '../assets/KIC2.avif'
 import imgg from '../assets/kit1.avif'
-import immg from '../assets/KIC4.avif'
+
 import immg1 from '../assets/kkl.avif'
 import immg2 from '../assets/kkl1.avif'
 import immg3 from '../assets/kkl2.avif'
@@ -17,7 +17,7 @@ export const products=[
         name:"Women ROund Neck Cotton Top",
         description:"A You can also use variant modifiers to target media queries like responsive breakpoints, dark mode, prefers-reduced-motion, and more. For example, use md:grid-cols-6 to apply the grid-cols-6 utility at only medium screen sizes and above.l ",
         price:5060,
-        image:[immg1],
+        image:[immg1,imgg,imgs,immg2],
         category:"Women",
         subCategory:"Topwear",
         sizes:["S","M","L","XL"],
