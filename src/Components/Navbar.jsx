@@ -16,25 +16,32 @@ const Navbar = () => {
   const toggleMenu = () => {
     setMenuVisible((prev) => !prev);
   };
-  const handleNavigation = (path) => {
-    navigate(path);
-    window.scrollTo(0, 0); // Scroll to the top of the page
-};
 
   return (
     <>
       <div className="flex h-24 items-center justify-between py-5 font-medium sticky top-0 z-10 bg-white">
         {/* Logo */}
-        <Link to="/" onClick={() => window.scrollTo(0, 0)}>
+        <Link to="/">
           <h1 className="w-36 text-2xl">LUXNEST.</h1>
         </Link>
 
         {/* Navigation Links */}
         <ul className="hidden sm:flex gap-5 text-sm md:text-xl text-gray-700 hover:text-gray-900">
-          {['Home', 'Collection', 'About', 'Contact'].map((item) => (
+          {/* Home has a fixed route */}
+          <NavLink to="/" className="flex flex-col items-center gap-1">
+            <p className="uppercase">Home</p>
+            <hr
+              className={`w-2/4 border-none h-[1.5px] bg-gray-700 ${
+                location.pathname === '/' ? '' : 'hidden'
+              }`}
+            />
+          </NavLink>
+
+          {/* Dynamic navigation links */}
+          {['Collection', 'About', 'Contact'].map((item) => (
             <NavLink
               key={item}
-              to={`/${item.toLowerCase()}`} onClick={() => window.scrollTo(0, 0)}
+              to={`/${item.toLowerCase()}`}
               className="flex flex-col items-center gap-1"
             >
               <p className="uppercase">{item}</p>
@@ -67,7 +74,7 @@ const Navbar = () => {
                     <p
                       key={item}
                       onClick={() => {
-                        handleNavigation(`/${item.toLowerCase().replace(' ', '')}`);
+                        navigate(`/${item.toLowerCase().replace(' ', '')}`);
                         setMenuVisible(false);
                       }}
                       className="cursor-pointer hover:text-black"
@@ -112,13 +119,20 @@ const Navbar = () => {
               </div>
               <p>Back</p>
             </div>
-            {[ 'Collection', 'About', 'My Profile', 'Cart', 'Contact', 'Orders', 'Login', 'Admin', 'Logout'].map(
+            <NavLink
+              onClick={() => setVisible(false)}
+              to="/"
+              className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800"
+            >
+              Home
+            </NavLink>
+            {['Collection', 'About', 'My Profile', 'Cart', 'Contact', 'Orders', 'Login', 'AdminDashboard', 'Logout'].map(
               (item) => (
                 <NavLink
                   key={item}
-                  onClick={() =>  setVisible(false)}
-                  to={`/${item.toLowerCase().replace(' ', '')}`} 
-                  className="uppercase py-2 pl-6 hover:bg-gray-500 hover:text-gray-800"
+                  onClick={() => setVisible(false)}
+                  to={`/${item.toLowerCase().replace(' ', '')}`}
+                  className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800"
                 >
                   {item}
                 </NavLink>
