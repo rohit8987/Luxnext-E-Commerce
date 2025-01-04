@@ -1,11 +1,11 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
-import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
-import PersonIcon from '@mui/icons-material/Person';
-import SearchIcon from '@mui/icons-material/Search';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import { ShopContext } from './ShopContext';
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import PersonIcon from "@mui/icons-material/Person";
+import SearchIcon from "@mui/icons-material/Search";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import { ShopContext } from "./ShopContext";
 
 const Navbar = () => {
   const [menuVisible, setMenuVisible] = useState(false); // For PersonIcon dropdown
@@ -13,8 +13,29 @@ const Navbar = () => {
   const { setShowSearch, getCartCount } = useContext(ShopContext);
   const navigate = useNavigate();
 
+  const user = JSON.parse(localStorage.getItem("users"));
+
   const toggleMenu = () => {
     setMenuVisible((prev) => !prev);
+  };
+
+  // Function to handle outside clicks
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".dropdown-menu") && !event.target.closest(".person-icon")) {
+        setMenuVisible(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  const logout = () => {
+    localStorage.clear("users");
+    navigate("/login");
   };
 
   return (
@@ -27,31 +48,18 @@ const Navbar = () => {
 
         {/* Navigation Links */}
         <ul className="hidden sm:flex gap-5 text-sm md:text-xl text-gray-700 hover:text-gray-900">
-          {/* Home has a fixed route */}
           <NavLink to="/" className="flex flex-col items-center gap-1">
             <p className="uppercase">Home</p>
-            <hr
-              className={`w-2/4 border-none h-[1.5px] bg-gray-700 ${
-                location.pathname === '/' ? '' : 'hidden'
-              }`}
-            />
           </NavLink>
-
-          {/* Dynamic navigation links */}
-          {['Collection', 'About', 'Contact'].map((item) => (
-            <NavLink
-              key={item}
-              to={`/${item.toLowerCase()}`}
-              className="flex flex-col items-center gap-1"
-            >
-              <p className="uppercase">{item}</p>
-              <hr
-                className={`w-2/4 border-none h-[1.5px] bg-gray-700 ${
-                  location.pathname === `/${item.toLowerCase()}` ? '' : 'hidden'
-                }`}
-              />
-            </NavLink>
-          ))}
+          <NavLink to="/collection" className="flex flex-col items-center gap-1">
+            <p className="uppercase">Collection</p>
+          </NavLink>
+          <NavLink to="/about" className="flex flex-col items-center gap-1">
+            <p className="uppercase">About</p>
+          </NavLink>
+          <NavLink to="/contact" className="flex flex-col items-center gap-1">
+            <p className="uppercase">Contact</p>
+          </NavLink>
         </ul>
 
         {/* Icons and Mobile Menu */}
@@ -62,28 +70,70 @@ const Navbar = () => {
           </div>
 
           {/* Person Icon with Dropdown */}
-          <div className="relative inline-block">
+          <div className="relative inline-block person-icon">
             <PersonIcon
               className="w-8 h-8 cursor-pointer text-gray-700"
               onClick={toggleMenu}
             />
             {menuVisible && (
-              <div className="absolute right-0 w-36 bg-slate-100 text-gray-700 rounded shadow-lg z-10">
+              <div className="absolute right-0 w-36 bg-white text-gray-700 rounded shadow-lg z-10 dropdown-menu">
                 <div className="flex flex-col gap-2 py-3 px-5">
-                  {['My Profile', 'Orders', 'Admin', 'Login', 'Logout'].map((item) => (
-                    <p
-                      key={item}
+                  {/* User Role: User */}
+                  {user?.role === "user" && (
+                    <div className="hover:text-black cursor-pointer">
+                      <Link onClick={() => setMenuVisible(false)} to={"/myprofile"}>
+                        {user?.name}
+                      </Link>
+                    </div>
+                  )}
+
+                  {/* User Role: Admin */}
+                  {user?.role === "admin" && (
+                    <div className="hover:text-black cursor-pointer">
+                      <Link onClick={() => setMenuVisible(false)} to="/admindashboard">
+                      {user?.name}
+                      </Link>
+                    </div>
+                  )}
+
+                  {/* Orders Link */}
+                  <div className="hover:text-black cursor-pointer">
+                    <Link onClick={() => setMenuVisible(false)} to="/orders">
+                      Orders
+                    </Link>
+                  </div>
+
+                  {/* Signup and Login for Guests */}
+                  {!user && (
+                    <>
+                      <div className="hover:text-black cursor-pointer">
+                        <Link onClick={() => setMenuVisible(false)} to="/signup">
+                          Signup
+                        </Link>
+                      </div>
+                      <div className="hover:text-black cursor-pointer">
+                        <Link onClick={() => setMenuVisible(false)} to="/login">
+                          Login
+                        </Link>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Logout for Logged-in Users */}
+                  {user && (
+                    <div
+                      className="hover:text-black cursor-pointer"
                       onClick={() => {
-                        navigate(`/${item.toLowerCase().replace(' ', '')}`);
+                        logout();
                         setMenuVisible(false);
                       }}
-                      className="cursor-pointer hover:text-black"
                     >
-                      {item}
-                    </p>
-                  ))}
+                      Logout
+                    </div>
+                  )}
                 </div>
               </div>
+
             )}
           </div>
 
@@ -105,39 +155,79 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         <div
-          className={`fixed top-0 right-0 bottom-0 overflow-hidden bg-white transition-all duration-300 ease-in-out ${
-            visible ? 'w-2/3 sm:w-1/3 shadow-lg' : 'w-0'
-          }`}
+          className={`fixed top-0 right-0 bottom-0 overflow-hidden bg-white transition-all duration-300 ease-in-out ${visible ? "w-2/3 sm:w-1/3 shadow-lg" : "w-0"
+            }`}
         >
           <div className="flex flex-col text-gray-600">
             <div
               onClick={() => setVisible(false)}
-              className="flex items-center gap-4 p-3 cursor-pointer"
+              className="flex items-center gap-4 p-3 "
             >
               <div className="h-4 rotate-180 flex items-center">
                 <ArrowBackIosIcon sx={{ fontSize: 20 }} />
               </div>
               <p>Back</p>
             </div>
-            <NavLink
-              onClick={() => setVisible(false)}
-              to="/"
-              className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800"
-            >
-              Home
+            <NavLink to="/" onClick={() => setVisible(false)} className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800 ">
+              <p className="uppercase">Home</p>
             </NavLink>
-            {['Collection', 'About', 'My Profile', 'Cart', 'Contact', 'Orders', 'Login', 'AdminDashboard', 'Logout'].map(
-              (item) => (
-                <NavLink
-                  key={item}
-                  onClick={() => setVisible(false)}
-                  to={`/${item.toLowerCase().replace(' ', '')}`}
-                  className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800"
-                >
-                  {item}
+              <NavLink to="/collection" onClick={() => setVisible(false)} className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800">
+                <p className="uppercase">Collection</p>
+              </NavLink>
+              <NavLink to="/about" onClick={() => setVisible(false)} className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800">
+                <p className="uppercase">About</p>
+              </NavLink>
+              <NavLink to="/contact" onClick={() => setVisible(false)} className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800">
+                <p className="uppercase">Contact</p>
+              </NavLink>
+            <div className="">
+              <div className="flex flex-col text-gray-600 ">
+                {/* User Role: User */}
+                {user?.role === "user" && (
+                   <NavLink to="/myprofile" onClick={() => setVisible(false)} className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800 ">
+                   <p className="uppercase">{user?.name}</p>
+                 </NavLink>
+                  )}
+
+                {/* User Role: Admin */}
+                {user?.role === "admin" && (
+                  <NavLink to="/admindashboard" onClick={() => setVisible(false)} className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800 ">
+                  <p className="uppercase">{user?.name}</p>
                 </NavLink>
-              )
-            )}
+                )}
+
+                {/* Orders Link */}
+                <NavLink to="/orders" onClick={() => setVisible(false)} className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800 ">
+                  <p className="uppercase">orders</p>
+                </NavLink>
+
+                {/* Signup and Login for Guests */}
+                {!user && (
+                  <>
+                    <NavLink to="/signup" onClick={() => setVisible(false)} className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800 ">
+                  <p className="uppercase">signup</p>
+                </NavLink>
+                <NavLink to="/login" onClick={() => setVisible(false)} className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800 ">
+                  <p className="uppercase">login</p>
+                </NavLink>
+                  </>
+                )}
+
+                {/* Logout for Logged-in Users */}
+                {user && (
+                  <div
+                    className="uppercase py-2 pl-6 hover:bg-gray-100 hover:text-gray-800"
+                    onClick={() => {
+                      logout();
+                      setMenuVisible(false);
+                    }}
+                  >
+                    Logout
+                  </div>
+                )}
+              </div>
+            </div>
+           
           </div>
         </div>
       </div>

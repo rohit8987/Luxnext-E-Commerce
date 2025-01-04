@@ -5,12 +5,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyB5MZRYhozXgern1xSgqtD0_KDkc4xqsgs",
-  authDomain: "luxnest-web.firebaseapp.com",
-  projectId: "luxnest-web",
-  storageBucket: "luxnest-web.firebasestorage.app",
-  messagingSenderId: "123089720784",
-  appId: "1:123089720784:web:9a5b2d6fb6c407f38855d5"
+  apiKey: "AIzaSyB3yyiI1dyGeS6T2_bGBO90YMh0gNIKOEY",
+  authDomain: "luxnest-323c1.firebaseapp.com",
+  projectId: "luxnest-323c1",
+  storageBucket: "luxnest-323c1.firebasestorage.app",
+  messagingSenderId: "965793169040",
+  appId: "1:965793169040:web:294add401a8d6c242fe215"
 };
 
 // Initialize Firebase

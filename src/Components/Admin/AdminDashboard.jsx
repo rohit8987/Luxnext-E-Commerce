@@ -5,10 +5,19 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import ProductDetail from './ProductDetail';
 import OrderDetail from './OrderDetail';
 import UserDetail from './UserDetail';
+import MyContext from '../../Context/MyContext';
+import { useContext } from 'react';
 
 
 
 const AdminDashboard = () => {
+
+    const user = JSON.parse(localStorage.getItem('users'))
+    
+    const context = useContext(MyContext);
+    const {getAllProduct,getAllOrder,getAllUser} =  context;
+   
+
     return (
         <div>
             {/* Top */}
@@ -29,8 +38,10 @@ const AdminDashboard = () => {
                         </div>
                         {/* text  */}
                         <div className="">
-                            <h1 className=" text-center text-lg"><span className=" font-bold">Name :</span> Kamal Nayan Upadhyay</h1>
-                            <h1 className=" text-center text-lg "><span className=" font-bold">Email :</span> test@gmail.com</h1>
+                            <h1 className=" text-center text-lg"><span className=" font-bold">Name :</span>{user?.name} </h1>
+                            <h1 className=" text-center text-lg "><span className=" font-bold">Email :</span> {user?.email}</h1>
+                            <h1 className=" text-center text-lg "><span className=" font-bold">Date :</span> {user?.date}</h1>
+                            <h1 className=" text-center text-lg "><span className=" font-bold">Role :</span> {user?.role}</h1>
                         </div>
                     </div>
                 </div>
@@ -45,7 +56,7 @@ const AdminDashboard = () => {
                                     <div className="text-black text-3xl mb-3 inline-block">
                                         <ShoppingBagOutlinedIcon style={{ fontSize: '3rem' }} />
                                     </div>
-                                    <h2 className="title-font font-medium text-3xl text-black-400 fonts1" >10</h2>
+                                    <h2 className="title-font font-medium text-3xl text-black-400 fonts1" >{getAllProduct.length}</h2>
                                     <p className=" text-black-500  font-bold" >Total Products</p>
                                 </div>
                             </Tab>
@@ -56,7 +67,7 @@ const AdminDashboard = () => {
                                     <div className="text-black text-3xl mb-3 inline-block">
                                         <MenuOutlinedIcon style={{ fontSize: '3rem' }} />
                                     </div>
-                                    <h2 className="title-font font-medium text-3xl text-black-400 fonts1" >10</h2>
+                                    <h2 className="title-font font-medium text-3xl text-black-400 fonts1" >{getAllOrder.length}</h2>
                                     <p className=" text-black-500  font-bold" >Total Order</p>
                                 </div>
                             </Tab>
@@ -68,7 +79,7 @@ const AdminDashboard = () => {
                                         <PersonIcon style={{ fontSize: '3rem' }} />
                                     </div>
 
-                                    <h2 className="title-font font-medium text-3xl text-black-400 fonts1" >10</h2>
+                                    <h2 className="title-font font-medium text-3xl text-black-400 fonts1" >{getAllUser.length}</h2>
                                     <p className=" text-black-500  font-bold" >Total Users</p>
                                 </div>
                             </Tab>
